@@ -52,13 +52,19 @@ public class Barometer : MonoBehaviour
         {
             targetPressure = PlayerController.Instance.inflationScale;
         }
-        if (Mathf.Abs(currentPressure - targetPressure) > 0.01f)
+        if(currentPressure != targetPressure)
         {
-            currentPressure=Mathf.Lerp(currentPressure, targetPressure, smoothSpeed*Time.deltaTime);
+            if (Mathf.Abs(currentPressure - targetPressure) > 0.001f)
+            {
+                currentPressure = Mathf.Lerp(currentPressure, targetPressure, smoothSpeed * Time.deltaTime);
+            }
+            else
+            {
+                currentPressure = targetPressure;
+                //Debug.Log("target:" + targetPressure + " current:" + currentPressure);
+            }
             UpdateBarometer();
         }
-        //Debug.Log("target:" + targetPressure + " current:" + currentPressure);
-
     }
 
     void UpdateBarometer()
@@ -66,22 +72,22 @@ public class Barometer : MonoBehaviour
         if (barometerFillImage != null)
         {
             barometerFillImage.fillAmount = currentPressure / maxPressure;
-            if (currentPressure < noJumpThreshold)
+            if (currentPressure <= noJumpThreshold)
                 barometerFillImage.color = Color.white;
-            else if (currentPressure < halfPowerThreshold)
+            else if (currentPressure <= halfPowerThreshold)
                 barometerFillImage.color = Color.green;
-            else if (currentPressure < normalThreshold)
+            else if (currentPressure <= normalThreshold)
                 barometerFillImage.color = Color.yellow;
-            else if (currentPressure < boostThreshold)
+            else if (currentPressure <= boostThreshold)
                 barometerFillImage.color = new Color(1f, 165f / 255f, 0);
-            else if (currentPressure < flyThreshold)
+            else if (currentPressure <= flyThreshold)
                 barometerFillImage.color = Color.red;
             else
                 barometerFillImage.color = Color.red;
         }
         if(barometerText != null)
         {
-            barometerText.text = Mathf.CeilToInt(currentPressure*100).ToString();
+            barometerText.text = (Mathf.RoundToInt(currentPressure*100)).ToString();
         }
     }
 }
