@@ -56,7 +56,8 @@ public class Barometer : MonoBehaviour
         {
             if (Mathf.Abs(currentPressure - targetPressure) > 0.001f)
             {
-                currentPressure = Mathf.Lerp(currentPressure, targetPressure, smoothSpeed * Time.deltaTime);
+                currentPressure = Mathf.Clamp(Mathf.Lerp(currentPressure, targetPressure,
+                    smoothSpeed * Time.deltaTime),0,maxPressure);
             }
             else
             {
